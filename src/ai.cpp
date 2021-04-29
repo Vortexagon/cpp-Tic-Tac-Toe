@@ -29,7 +29,7 @@ void OptimalAI::move(Board& board, char mark)
             best_index = value;
         }
     }
-    board.setCell('X', best_index);
+    board.setCell(mark, best_index);
 }
 
 float OptimalAI::minimax(Board& board, bool maximising, char ai_mark)
@@ -37,24 +37,9 @@ float OptimalAI::minimax(Board& board, bool maximising, char ai_mark)
     char state = board.is_ended();
     if (state != 'N')
     {
-        switch (state)
-        {
-        case 'X':
-            return 1;
-            break;
-
-        case 'D':
-            return 0;
-            break;
-
-        case 'O':
-            return -1;
-            break;
-
-        default:
-            return 0;
-            break;
-        }
+        if (state == 'D'){return 0;}
+        if (state == ai_mark){return 1;}
+        else {return -1;}
     }
 
     float final_score;
