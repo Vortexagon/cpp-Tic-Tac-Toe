@@ -6,14 +6,14 @@
 class RandomAI
 {
 public:
-    static void move(Board& board);
+    static void move(Board& board, char mark);
 };
 
 class OptimalAI
 {
 public:
-    static void move(Board& board);
-    static float minimax(Board& board, bool maximising);
+    static void move(Board& board, char mark);
+    static float minimax(Board& board, bool maximising, char ai_mark);
 };
 
 #endif // AI_H_INCLUDED
