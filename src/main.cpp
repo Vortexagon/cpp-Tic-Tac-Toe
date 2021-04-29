@@ -33,7 +33,7 @@ int main()
     {
         b1.printBoard();
         process_user_move(b1);
-        OptimalAI::move(b1);
+        OptimalAI::move(b1, 'X');
         if (b1.is_ended() != 'N'){break;}
     }
 
