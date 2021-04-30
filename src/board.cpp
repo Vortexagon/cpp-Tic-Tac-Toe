@@ -1,14 +1,13 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
 #include <bitset>
 
 #include "board.h"
 
 char Board::is_ended()
 {
-    BoardLayer win_masks[8] = {
+    int win_masks[8] = {
         0b111000000, 0b000111000, 0b000000111,
         0b100100100, 0b010010010, 0b001001001,
         0b100010001, 0b001010100
@@ -27,7 +26,7 @@ char Board::is_ended()
 
     BoardLayer squashed_board = this->getSquashedBoard();
 
-    if (squashed_board == 0b111111111)
+    if (squashed_board.all())
     {
         return 'D';
     }
@@ -43,12 +42,11 @@ void Board::printBoard()
 
     for (int i = 0; i < 9; i++)
     {
-        int cell_mask = 0b100000000 >> i;
         bool symbol_exists = false;
 
         for (BoardLayer layer: {x_layer, o_layer})
         {
-            if (layer.to_ulong() & cell_mask)
+            if (layer[i])
             {
                 boardArray[i] = (layer == x_layer) ? 'X' : 'O';
                 symbol_exists = true;
@@ -77,16 +75,14 @@ void Board::printBoard()
 
 void Board::clearCell(int index)
 {
-    int cellMask = ~(0b100000000 >> index);
-
-    this->x_layer &= cellMask;
-    this->o_layer &= cellMask;
+    this->x_layer.reset(index);
+    this->o_layer.reset(index);
 }
 
 std::vector<int> Board::getFreeCells()
 {
     std::vector<int> free_cells;
-    BoardLayer squashed_board = this->getSquashedBoard;
+    BoardLayer squashed_board = this->getSquashedBoard();
 
     for (int i = 0; i < 9; i++)
     {
@@ -103,7 +99,10 @@ void Board::setCell(char layer, int index)
 {
     BoardLayer& wanted_layer = layer == 'X' ? this->x_layer : this->o_layer;
 
-    int cellMask = 0b100000000 >> index;
+    wanted_layer.set(index, true);
+};
 
-    wanted_layer |= cellMask;
+BoardLayer Board::getSquashedBoard()
+{
+    return this->x_layer | this->o_layer;
 }

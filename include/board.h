@@ -6,11 +6,11 @@
 #ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
 
+typedef std::bitset<9> BoardLayer;
 class Board
 {
 
 public:
-    typedef std::bitset<9> BoardLayer;
     BoardLayer x_layer;
     BoardLayer o_layer;
 
