@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <bitset>
 
 #include "board.h"
 
@@ -12,20 +13,20 @@ char Board::is_ended()
         0b100010001, 0b001010100
     };
 
-    int squashed_board = this->x_layer | this->o_layer;
-
-    for (int layer : {x_layer, o_layer})
+    for (BoardLayer layer : {x_layer, o_layer})
     {
         for (int mask : win_masks)
         {
-            if ((layer & mask) == mask)
+            if ((layer.to_ulong() & mask) == mask)
             {
                 return (layer == this->x_layer) ? 'X' : 'O';
             }
         }
     }
 
-    if (squashed_board == 0b111111111)
+    BoardLayer squashed_board = this->get_squashed_board();
+
+    if (squashed_board.all())
     {
         return 'D';
     }
@@ -33,21 +34,19 @@ char Board::is_ended()
     return 'N';
 };
 
-void Board::printBoard()
+void Board::print_board()
 {
-    std::string horizontalSep = "+---+---+---+";
+    std::string horizontal_sep = "+---+---+---+";
 
     char boardArray[9];
-    int squashed_board = this->x_layer | this-> o_layer;
 
     for (int i = 0; i < 9; i++)
     {
-        int cell_mask = 0b100000000 >> i;
         bool symbol_exists = false;
 
-        for (int layer: {x_layer, o_layer})
+        for (BoardLayer layer: {x_layer, o_layer})
         {
-            if (layer & cell_mask)
+            if (layer[i])
             {
                 boardArray[i] = (layer == x_layer) ? 'X' : 'O';
                 symbol_exists = true;
@@ -61,7 +60,7 @@ void Board::printBoard()
         }
     }
 
-    std::cout << horizontalSep << std::endl;
+    std::cout << horizontal_sep << std::endl;
     for (int i = 0; i < 9; i += 3)
     {
         std::cout <<
@@ -70,41 +69,40 @@ void Board::printBoard()
         " | " << boardArray[i + 2] <<
         " |"  << std::endl;
 
-
-        std::cout << horizontalSep << std::endl;
+        std::cout << horizontal_sep << std::endl;
     }
 };
 
-void Board::clearCell(int index)
+void Board::clear_cell(int index)
 {
-    int cellMask = ~(0b100000000 >> index);
-
-    this->x_layer &= cellMask;
-    this->o_layer &= cellMask;
+    this->x_layer.reset(index);
+    this->o_layer.reset(index);
 }
 
-std::vector<int> Board::getFreeCells()
+std::vector<int> Board::get_free_cells()
 {
-    std::vector<int> freeCells;
-    int cellMask = 0b100000000;
-    int squashed_board = this->x_layer | this-> o_layer;
+    std::vector<int> free_cells;
+    BoardLayer squashed_board = this->get_squashed_board();
 
     for (int i = 0; i < 9; i++)
     {
-        if (!(squashed_board & (cellMask >> i)))
+        if (!squashed_board[i])
         {
-            freeCells.push_back(i);
+            free_cells.push_back(i);
         }
     }
 
-    return freeCells;
+    return free_cells;
 };
 
-void Board::setCell(char layer, int index)
+void Board::set_cell(char layer, int index)
 {
-    int& wanted_layer = layer == 'X' ? this->x_layer : this->o_layer;
+    BoardLayer& wanted_layer = layer == 'X' ? this->x_layer : this->o_layer;
 
-    int cellMask = 0b100000000 >> index;
+    wanted_layer.set(index, true);
+};
 
-    wanted_layer |= cellMask;
+BoardLayer Board::get_squashed_board()
+{
+    return this->x_layer | this->o_layer;
 }

@@ -14,11 +14,11 @@ void process_user_move(Board& board, char user_mark)
         std::cout << "Enter a move >> ";
         std::cin >> choice;
 
-        std::vector<int> free_cells = board.getFreeCells();
+        std::vector<int> free_cells = board.get_free_cells();
 
         if (std::find(free_cells.begin(), free_cells.end(), choice - 1) != free_cells.end())
         {
-            board.setCell(user_mark, choice - 1);
+            board.set_cell(user_mark, choice - 1);
             return;
         }
     }
@@ -27,20 +27,19 @@ void process_user_move(Board& board, char user_mark)
 
 int main()
 {
-
     const char user_mark = 'X';
     const char comp_mark = 'O';
     Board b1;
 
     while (b1.is_ended() == 'N')
     {
-        b1.printBoard();
+        b1.print_board();
         process_user_move(b1, 'X');
         OptimalAI::move(b1, 'O');
         if (b1.is_ended() != 'N'){break;}
     }
 
-    b1.printBoard();
+    b1.print_board();
 
     std::string result_msg;
 
