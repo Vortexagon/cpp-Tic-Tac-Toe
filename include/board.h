@@ -7,19 +7,19 @@
 #define BOARD_H_INCLUDED
 
 typedef std::bitset<9> BoardLayer;
+
 class Board
 {
-
 public:
     BoardLayer x_layer;
     BoardLayer o_layer;
 
     char is_ended();
-    void printBoard();
-    void clearCell(int index);
-    BoardLayer getSquashedBoard();
-    std::vector<int> getFreeCells();
-    void setCell(char layer, int index);
+    void print_board();
+    void clear_cell(int index);
+    BoardLayer get_squashed_board();
+    std::vector<int> get_free_cells();
+    void set_cell(char layer, int index);
 };
 
 #endif // BOARD_H_INCLUDED

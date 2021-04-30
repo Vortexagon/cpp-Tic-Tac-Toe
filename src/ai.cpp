@@ -7,7 +7,7 @@
 
 void RandomAI::move(Board& board, char mark)
 {
-    board.setCell(mark, board.getFreeCells()[0]);
+    board.set_cell(mark, board.get_free_cells()[0]);
 }
 
 void OptimalAI::move(Board& board, char mark)
@@ -15,13 +15,13 @@ void OptimalAI::move(Board& board, char mark)
     int best_score = -999999;
     int best_index = 0;
 
-    std::vector<int> free_cells = board.getFreeCells();
+    std::vector<int> free_cells = board.get_free_cells();
 
     for(const auto& value: free_cells) {
 
-        board.setCell(mark, value);
+        board.set_cell(mark, value);
         float score = OptimalAI::minimax(board, false, mark);
-        board.clearCell(value);
+        board.clear_cell(value);
 
         if (score > best_score)
         {
@@ -29,7 +29,7 @@ void OptimalAI::move(Board& board, char mark)
             best_index = value;
         }
     }
-    board.setCell(mark, best_index);
+    board.set_cell(mark, best_index);
 }
 
 float OptimalAI::minimax(Board& board, bool maximising, char ai_mark)
@@ -48,11 +48,11 @@ float OptimalAI::minimax(Board& board, bool maximising, char ai_mark)
 
     char opp_mark = ai_mark == 'X' ? 'O' : 'X';
 
-    for (const auto& index: board.getFreeCells())
+    for (const auto& index: board.get_free_cells())
     {
-        board.setCell(maximising ? ai_mark : opp_mark, index);
+        board.set_cell(maximising ? ai_mark : opp_mark, index);
         float score = OptimalAI::minimax(board, !maximising, ai_mark);
-        board.clearCell(index);
+        board.clear_cell(index);
 
         if ((maximising && score > final_score) || (!maximising && score < final_score))
         {
