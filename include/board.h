@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <bitset>
 
 #ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
@@ -9,12 +10,14 @@ class Board
 {
 
 public:
-    int x_layer = 0b000000000;
-    int o_layer = 0b000000000;
+    typedef std::bitset<9> BoardLayer;
+    BoardLayer x_layer;
+    BoardLayer o_layer;
 
     char is_ended();
     void printBoard();
     void clearCell(int index);
+    BoardLayer getSquashedBoard();
     std::vector<int> getFreeCells();
     void setCell(char layer, int index);
 };

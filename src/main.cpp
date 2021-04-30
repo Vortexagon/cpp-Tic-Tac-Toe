@@ -27,7 +27,6 @@ void process_user_move(Board& board, char user_mark)
 
 int main()
 {
-
     const char user_mark = 'X';
     const char comp_mark = 'O';
     Board b1;
