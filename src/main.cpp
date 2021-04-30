@@ -22,7 +22,6 @@ void process_user_move(Board& board, char user_mark)
             return;
         }
     }
-
 }
 
 int main()
@@ -34,8 +33,8 @@ int main()
     while (b1.is_ended() == 'N')
     {
         b1.print_board();
-        process_user_move(b1, 'X');
-        OptimalAI::move(b1, 'O');
+        process_user_move(b1, user_mark);
+        OptimalAI::move(b1, comp_mark);
         if (b1.is_ended() != 'N'){break;}
     }
 
