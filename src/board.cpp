@@ -85,19 +85,18 @@ void Board::clearCell(int index)
 
 std::vector<int> Board::getFreeCells()
 {
-    std::vector<int> freeCells;
-    BoardLayer cellMask = 0b100000000;
+    std::vector<int> free_cells;
     BoardLayer squashed_board = this->getSquashedBoard;
 
     for (int i = 0; i < 9; i++)
     {
-        if (!(squashed_board & (cellMask >> i)))
+        if (!squashed_board[i])
         {
-            freeCells.push_back(i);
+            free_cells.push_back(i);
         }
     }
 
-    return freeCells;
+    return free_cells;
 };
 
 void Board::setCell(char layer, int index)
